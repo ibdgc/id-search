@@ -1,0 +1,10 @@
+# Configuration defaults
+
+db-url: sqlite:///tmp/ibdgc.db
+data-dir: data
+redcap-dir: tmp/redcap
+
+registration:
+    url: https://redcap.uchicago.edu/api/
+    project: IBDGCParticipantRegistration
+    export-dir: tmp/redcap
