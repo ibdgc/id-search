@@ -1,5 +1,4 @@
 *.pyc
 *.db
-tmp/*
 /id_search.egg-info
 build/
