@@ -1,1 +1,2 @@
-include ibdgc_db/config_default.yaml
+include requirements.txt
+
