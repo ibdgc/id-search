@@ -93,10 +93,12 @@ class RegisteredParticipant(Base):
                         cascade='all, delete-orphan')
     dna_samples = relationship('DNASample', backref='participant',
                                cascade='all, delete-orphan')
-    serum_samples = relationship('SerumSample', backref='participant',
+    blood_samples = relationship('BloodSample', backref='participant',
                                  cascade='all, delete-orphan')
     local_dna_samples = relationship('LocalDNASample', backref='participant',
                                      cascade='all, delete-orphan')
+    genotyping_results = relationship('GenotypingResult', backref='participant',
+                                      cascade='all, delete-orphan')
 
     # Note: We use check constraints below instead of enums since SQLite
     # doesn't support enum fields.
@@ -171,17 +173,23 @@ class DNASample(Base):
        return (f'DNASample(consortium_id={self.consortium_id}, '
                f'id={self.id}, date_collected={self.date_collected})')
 
-class SerumSample(Base):
-    __tablename__ = 'serum_sample'
+class BloodSample(Base):
+    __tablename__ = 'blood_sample'
 
     id = Column(String, primary_key=True)
     consortium_id = Column(String(14), ForeignKey('registered_participant.consortium_id'),
                            nullable=False)
+    sample_type = Column(String(6))
     date_collected = Column(Date, nullable=True)
+
+    __table_args__ = (
+        CheckConstraint('sample_type IN ("Serum","Plasma")'),
+    )
 
     def __repr__(self):
        return (f'SerumSample(consortium_id={self.consortium_id}, '
-               f'id={self.id}, date_collected={self.date_collected})')
+               f'sample_type={self.sample_type}, id={self.id}, '
+               f'date_collected={self.date_collected})')
 
 class LocalDNASample(Base):
     __tablename__ = 'local_dna_sample'
@@ -197,6 +205,24 @@ class LocalDNASample(Base):
                f'consortium_id={self.consortium_id}, '
                f'date_collected={self.date_collected})')
 
+class GenotypingResult(Base):
+    __tablename__ = 'genotyping_result'
+
+    id = Column(String, primary_key=True)
+    consortium_id = Column(String(14), ForeignKey('registered_participant.consortium_id'),
+                           nullable=False)
+    project = Column(String(10))
+    barcode = Column(String(19))
+
+    __table_args__ = (
+        CheckConstraint('project IN ("Immunochip","Exome Chip","GSA")', name='validate_proj'),
+        CheckConstraint(f'barcode GLOB "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_R[0-9][0-9]C[0-9][0-9]"', name='validate_code')
+    )
+
+    def __repr__(self):
+        return(f'GenotypingResult(consortium_id={self.consortium_id}, '
+               f'project={self.project}, id={self.id}, barcode={self.barcode}')
+
 # List of ways to lookup an individual participant
 Base.metadata.info = {
     'lookups': [RegisteredParticipant.consortium_id,
@@ -205,6 +231,7 @@ Base.metadata.info = {
                 RutgersLCL.niddk_no,
                 RutgersLCL.knumber,
                 DNASample.id,
-                SerumSample.id,
-                LocalDNASample.id]
+                BloodSample.id,
+                LocalDNASample.id,
+                GenotypingResult.id]
 }
