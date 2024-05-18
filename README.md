@@ -31,3 +31,19 @@ mv ibdgc.db id-search/tmp
 ```
 
 ### Usage
+
+UNDER DEVELOPMENT
+
+The search tool contains a `lookup` function which offers a preconfigured query of the database by ID. Queries can be made in a batch fashion that will generate a dataframe output. This is automatically written to a csv file in the project `tmp` directory.
+
+This is a basic search by NIDDK consortium ID.
+
+```
+id-search lookup A269801-131080
+```
+
+This query is an example of how to search by GWAS Mega 2 project GM IDs.
+
+```
+id-search lookup -i genotyping_result.id  GM211-1694
+```
