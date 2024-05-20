@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>IBDGC ID Tool</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <h1>IBDGC ID Tool</h1>
+
+    <form action="/lookup" method="post">
+      <label>ID Type:</label>
+      <select name="index">
+        <option value="consortium_id">Consortium ID</option>
+        <option value="local_id">Local ID</option>
+      </select>
+
+      <label>Center:</label>
+      <select name="center">
+        {% for center in centers %}
+        <option value="{{center}}">{{center}}</option>
+        {% endfor %}
+      </select>
+
+      <label>Query:</label>
+      <textarea name="value" rows="4" cols="50"></textarea>
+
+      <button type="submit">Lookup</button>
+    </form>
+  </body>
+</html>

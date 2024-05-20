@@ -1,0 +1,32 @@
+/* style.css */
+
+body {
+  font-family: Helvetica, "Trebuchet MS", sans-serif;
+}
+
+h1 {
+  font-size: 2em;
+  margin-left: 20px;
+}
+
+form {
+  margin: 20px 0 0 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 15px;
+}
+
+select {
+  margin-bottom: 10px;
+}
+
+textarea {
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
+}
